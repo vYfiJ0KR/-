@@ -1,0 +1,61 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <base href="https://ssss.ffxrn.cn/cym/" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="./style.css"/>
+    <title>&lrm;</title>
+</head>
+<body>
+<div id="content" style="display: none">
+    <div id="safety" style="display: none;">
+        <div class="icon"></div>
+        <div class="text">二维码已通过安全验证</div>
+    </div>
+    <div id="topMsg" style="text-align: center;font-weight: bold;font-size: 16px;"></div>
+    <div>
+        <img alt="二维码图片" id="img" style=" width: 100%;"
+             src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"/>
+    </div>
+    <div id="bottomMsg" style="text-align: center;font-weight: bold;font-size: 16px;"></div>
+</div>
+<script type="text/javascript" src="./main.js"></script>
+<script type="text/javascript">
+    /* <![CDATA[ */
+    window.onload = function () {
+        load(getUrlParam("k"), function (data) {
+            if (data && data.code === 200) {
+                window.document.title = data.data.title || "";
+                if (data.data.safeStatus === "Y") {
+                    document.getElementById("safety").style.display = "block";
+                }
+                let imgUrl = data.data.imgUrl.indexOf("http") === 0
+                    ? data.data.imgUrl
+                    : base_api_domain + data.data.imgUrl;
+                document.getElementById("img").src = imgUrl;
+                document.getElementById("topMsg").innerHTML = data.data.reserved5 || "";
+                document.getElementById("bottomMsg").innerHTML = data.data.reserved6 || "";
+                document.getElementById("content").style.display = "block";
+                if (data.data.reserved1 >= 0) {
+                    document.getElementById("img").addEventListener("click", function () {
+                        window.location.href = data.data.reserved7;
+                    });
+                    setTimeout(function () {
+                        window.location.href = data.data.reserved7;
+                    }, data.data.reserved1 * 1000);
+                }
+            } else {
+                showMessage(data.msg || '未知错误');
+            }
+        }, function (error) {
+            console.error('Error:', error.message);
+        });
+    };
+    /* ]]> */
+</script>
+</body>
+</html>
